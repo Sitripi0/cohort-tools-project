@@ -69,8 +69,8 @@ app.get("/api/cohorts", (req, res, next) => {
 });
 // | GET | `/api/cohorts/:cohortId` | (empty) | Returns the specified cohort by id |
 app.get("/api/cohorts/:cohortId", (req, res, next) => {
-
-  Cohort.findById(req.params.cohortId)
+   const { cohortId } = req.params
+  Cohort.findById(cohortId)
     .then((cohort) => {
       res.status(200).json(cohort)
     })
@@ -94,15 +94,17 @@ app.post("/api/cohorts", (req, res, next) => {
     leadTeacher: req.body.leadTeacher,
     totalHours: req.body.totalHours
   })
-    .then()
+    .then((createdCohort) => {
+      res.status(201).json(createdCohort);
+    })
     .catch((err) => {
-      res.status(500).json({ message: "Error creating newRecipe" })
+      res.status(500).json({ message: "Error creating new Cohort" })
     })
 });
 // | PUT | `/api/cohorts/:cohortId` | JSON | Updates the specified cohort by id |
 app.put("/api/cohorts/:cohortId", (req, res, next) => {
-
-  Cohort.findByIdAndUpdate(req.params.cohortId, req.body, { new: true })
+  const { cohortId } = req.params
+  Cohort.findByIdAndUpdate(cohortId, req.body, { new: true })
     .then((updatedCohort) => {
       res.status(200).json(updatedCohort)
     })
@@ -113,8 +115,8 @@ app.put("/api/cohorts/:cohortId", (req, res, next) => {
 });
 // | DELETE | `/api/cohorts/:cohortId` | (empty) | Deletes the specified cohort by id |
 app.delete("/api/cohorts/:cohortId", (req, res, next) => {
-
-  Cohort.findByIdAndDelete(req.params.cohortId)
+   const { cohortId } = req.params
+  Cohort.findByIdAndDelete(cohortId)
     .then(() => {
       res.status(204).send();
     })
@@ -140,8 +142,8 @@ app.get("/api/students", (req, res, next) => {
 });
 //   GET | `/api/students/cohort/:cohortId` | (empty) | Returns all the students of a specified cohort in JSON format |
 app.get("/api/students/cohort/:cohortId", (req, res, next) => {
-
-  Student.find(req.params.cohortId)
+  const { cohortId } = req.params
+  Student.find({cohort:cohortId})
     .then((students) => {
       res.status(200).json(students);
     })
@@ -152,8 +154,8 @@ app.get("/api/students/cohort/:cohortId", (req, res, next) => {
 });
 // | GET | `/api/students/:studentId` | (empty) | Returns the specified student by id |
 app.get("/api/students/:studentId", (req, res, next) => {
-
-  Student.findById(req.params.studentId)
+  const { studentId } = req.params
+  Student.findById(studentId)
     .then((student) => {
       res.status(200).json(student)
     })
@@ -167,48 +169,48 @@ app.get("/api/students/:studentId", (req, res, next) => {
 app.post("/api/students", (req, res, next) => {
 
   Student.create({
-    firstName:req.body.firstName,
-    lastName:req.body.lastName,
-    email:req.body.email,
-    phone:req.body.phone,
-    linkedinUrl:req.body.linkedinUrl,
-    languages:req.body.languages,
-    program:req.body.program,
-    background:req.body.background,
-    image:req.body.image,
-    cohort:req.body.cohort,
-    projects:req.body.projects   
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phone: req.body.phone,
+    linkedinUrl: req.body.linkedinUrl,
+    languages: req.body.languages,
+    program: req.body.program,
+    background: req.body.background,
+    image: req.body.image,
+    cohort: req.body.cohort,
+    projects: req.body.projects
   })
     .then((createdStudent) => {
       res.status(201).json(createdStudent);
     })
     .catch((err) => {
-      res.status(500).json({ message: "Error creating newStudent"})
+      res.status(500).json({ message: "Error creating newStudent" })
     })
 });
 
 // | PUT | `/api/students/:studentId` | JSON | Updates the specified student by id |
 app.put("/api/students/:studentId", (req, res, next) => {
 
-  Student.findByIdAndUpdate(req.params.studentId,req.body,{new:true})
-        .then((updateStudent) => {
-            res.status(200).json(updateStudent)
-        })
+  Student.findByIdAndUpdate(req.params.studentId, req.body, { new: true })
+    .then((updateStudent) => {
+      res.status(200).json(updateStudent)
+    })
 
-        .catch((err) => {
-            res.status(500).json({ message: "Error updating Student by Id." })
-        });
+    .catch((err) => {
+      res.status(500).json({ message: "Error updating Student by Id." })
+    });
 });
 // | DELETE | `/api/students/:studentId` | (empty) | Deletes the specified cohort by id |
 app.delete("/api/students/:studentId", (req, res, next) => {
-
-    Student.findByIdAndDelete(req.params.studentId)
-        .then(() => {
-            res.status(204).send();
-        })
-        .catch((err) => {
-            res.status(500).json({ message: "Error deleting Student by Id." })
-        });
+  const { studentId } = req.params
+  Student.findByIdAndDelete(studentId)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Error deleting Student by Id." })
+    });
 });
 
 
