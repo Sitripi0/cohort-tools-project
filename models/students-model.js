@@ -1,20 +1,20 @@
-const mongoose = require("mongoose");
-
 const mongoose = require('mongoose');
+
 const { Schema, Types } = mongoose;
 
 const studentSchema = new Schema({
+    
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     phone: { type: String, required: true },
     linkedinUrl: { type: String, default: "" },
     languages: {
-        type: String,
+        type: [String],
         enum: ["English", "Spanish", "French", "German", "Portuguese", "Dutch", "Other"]
     },
     program: {
-        type: String,
+        type: [String],
         enum: ["Web Dev", "UX/UI", "Data Analytics", "Cybersecurity"]
     },
     background: { type: String, default: "" },
@@ -24,7 +24,7 @@ const studentSchema = new Schema({
     },
     cohort: { type: Types.ObjectId, ref: 'Cohort' },
     projects: {
-        type: String,
+        type: [String],
         default: []
     }
 });
