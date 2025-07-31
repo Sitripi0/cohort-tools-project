@@ -16,8 +16,8 @@ mongoose
 // STATIC DATA
 // Devs Team - Import the provided files with JSON data of students and cohorts here:
 // ...
-// const cohorts = require("./cohorts.json");
-// const students = require("./students.json");
+const cohorts = require("./cohorts.json");
+const students = require("./students.json");
 
 // INITIALIZE EXPRESS APP - https://expressjs.com/en/4x/api.html#express
 const app = express();
@@ -69,7 +69,7 @@ app.get("/api/cohorts", (req, res, next) => {
 });
 // | GET | `/api/cohorts/:cohortId` | (empty) | Returns the specified cohort by id |
 app.get("/api/cohorts/:cohortId", (req, res, next) => {
-   const { cohortId } = req.params
+  const { cohortId } = req.params
   Cohort.findById(cohortId)
     .then((cohort) => {
       res.status(200).json(cohort)
@@ -115,7 +115,7 @@ app.put("/api/cohorts/:cohortId", (req, res, next) => {
 });
 // | DELETE | `/api/cohorts/:cohortId` | (empty) | Deletes the specified cohort by id |
 app.delete("/api/cohorts/:cohortId", (req, res, next) => {
-   const { cohortId } = req.params
+  const { cohortId } = req.params
   Cohort.findByIdAndDelete(cohortId)
     .then(() => {
       res.status(204).send();
@@ -131,6 +131,7 @@ app.delete("/api/cohorts/:cohortId", (req, res, next) => {
 app.get("/api/students", (req, res, next) => {
 
   Student.find({})
+    .populate("cohort")
     .then((students) => {
       console.log("Retrieved students ->", students);
       res.json(students);
@@ -143,7 +144,8 @@ app.get("/api/students", (req, res, next) => {
 //   GET | `/api/students/cohort/:cohortId` | (empty) | Returns all the students of a specified cohort in JSON format |
 app.get("/api/students/cohort/:cohortId", (req, res, next) => {
   const { cohortId } = req.params
-  Student.find({cohort:cohortId})
+  Student.find({ cohort: cohortId })
+    .populate("cohort")
     .then((students) => {
       res.status(200).json(students);
     })
@@ -156,6 +158,7 @@ app.get("/api/students/cohort/:cohortId", (req, res, next) => {
 app.get("/api/students/:studentId", (req, res, next) => {
   const { studentId } = req.params
   Student.findById(studentId)
+    .populate("cohort")
     .then((student) => {
       res.status(200).json(student)
     })
