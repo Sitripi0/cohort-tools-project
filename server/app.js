@@ -34,15 +34,17 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+
 // ROUTES//
 app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
-
 const cohortRouter = require("../routes/cohort-routes");
 app.use("/",cohortRouter);
 const studentsRouter = require("../routes/students-routes");
 app.use("/",studentsRouter);
+const authRoutes = require("../routes/auth.routes");
+app.use("/",authRoutes);
 
 //ERROR HANDLER MIDDLEWARE
 app.use(errorHandler);
