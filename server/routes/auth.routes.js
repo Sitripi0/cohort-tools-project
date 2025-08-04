@@ -60,7 +60,7 @@ router.post("/auth/signup", (req, res, next) => {
         });
 });
 // POST /auth/login - Checks the sent email and password and, if email and password are correct returns a JWT
-router.post('/login', (req, res, next) => {
+router.post('/auth/login', (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -79,6 +79,7 @@ router.post('/login', (req, res, next) => {
       if (passwordCorrect) {
         const { _id, email, name } = foundUser;
         const payload = { _id, email, name };
+        
         const authToken = jwt.sign(
           payload,
           process.env.TOKEN_SECRET,
@@ -98,7 +99,7 @@ router.post('/login', (req, res, next) => {
     });
 });
 // GET /auth/verify - Verifies that the JWT sent by the client is valid
-router.get('/verify', isAuthenticated, (req, res, next) => {
+router.get('/auth/verify', isAuthenticated, (req, res, next) => {
   console.log(`req.payload`, req.payload);
   res.json(req.payload);
 });

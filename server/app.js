@@ -4,11 +4,12 @@ const cookieParser = require("cookie-parser");
 const PORT = 5005;
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Cohort = require("../models/cohorts-model")
-const Student = require("../models/students-model")
-const { errorHandler, notFoundHandler } = require("../error-handling/error-handling")
+const Cohort = require("./models/cohorts-model")
+const Student = require("./models/students-model")
+const { errorHandler, notFoundHandler } = require("./error-handling/error-handling")
+require("dotenv/config");
 
-// connecting Mongoose
+ // connecting Mongoose
 mongoose
   .connect("mongodb://127.0.0.1:27017/cohort-tools-api")
   .then(x => console.log(`Connected to Database:"${x.connections[0].name}`))
@@ -39,11 +40,11 @@ app.use(cookieParser());
 app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
-const cohortRouter = require("../routes/cohort-routes");
+const cohortRouter = require("./routes/cohort-routes");
 app.use("/",cohortRouter);
-const studentsRouter = require("../routes/students-routes");
+const studentsRouter = require("./routes/students-routes");
 app.use("/",studentsRouter);
-const authRoutes = require("../routes/auth.routes");
+const authRoutes = require("./routes/auth.routes");
 app.use("/",authRoutes);
 
 //ERROR HANDLER MIDDLEWARE
